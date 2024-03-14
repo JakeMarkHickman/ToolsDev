@@ -8,7 +8,7 @@ public class PlanetaryGeneration : MonoBehaviour
 
     public float PlanetSize;
     public float PlanetMass;
-    public float Planet
+    public float Planet;
 
     // Start is called before the first frame update
     void Start()

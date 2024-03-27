@@ -8,7 +8,7 @@ public class PlanetaryGeneration : MonoBehaviour
 
     public float PlanetRadius;
     public float PlanetMass;
-    //public float Planet;
+    public float Resolution;
 
     
     void Update()

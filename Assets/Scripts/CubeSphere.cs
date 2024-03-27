@@ -4,18 +4,29 @@ using UnityEngine;
 
 public class CubeSphere : MonoBehaviour
 {
-    public void GenerateCubeSphere(float PlanetRadius)
+    private Mesh mesh;
+    private Vector3[] vertices;
+    private Vector3[] Tris;
+
+
+    public bool GenerateCubeSphere(float Resolution)
     {
-        
+        if(!CreateVerts(Resolution)) { return false; }
+        mesh.vertices = vertices;
+
+        if (!CreateTris()) { return false; }
+        mesh.vertices = Tris;
+
+        return true;
     }
 
-    private void CreateVerts()
+    private bool CreateVerts(float Resolution)
     {
-
+        return false;
     }
 
-    private void CreateTris()
+    private bool CreateTris()
     {
-
+        return false;
     }
 }

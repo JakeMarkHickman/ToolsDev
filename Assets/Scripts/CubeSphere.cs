@@ -4,29 +4,47 @@ using UnityEngine;
 
 public class CubeSphere : MonoBehaviour
 {
-    private Mesh mesh;
-    private Vector3[] vertices;
-    private Vector3[] Tris;
+    [SerializeField, HideInInspector]
+    MeshFilter[] MeshFilters;
+    TerrainFace[] terrainFaces;
 
-
-    public bool GenerateCubeSphere(float Resolution)
+    public void Init(int resolution, GameObject parent)
     {
-        if(!CreateVerts(Resolution)) { return false; }
-        mesh.vertices = vertices;
-
-        if (!CreateTris()) { return false; }
-        mesh.vertices = Tris;
-
-        return true;
+        CubeSetUp(resolution, parent);
+        GenerateMesh();
     }
 
-    private bool CreateVerts(float Resolution)
+    void CubeSetUp(int resolution, GameObject parent)
     {
-        return false;
+        if (MeshFilters == null || MeshFilters.Length == 0)
+        {
+            MeshFilters = new MeshFilter[6];
+        }
+        terrainFaces = new TerrainFace[6];
+
+        Vector3[] Directions = { Vector3.up, Vector3.down, Vector3.left, Vector3.right, Vector3.forward, Vector3.back };
+
+        for (int i = 0; i < 6; i++)
+        {
+            if (MeshFilters[i] == null)
+            {
+                GameObject meshObj = new GameObject("mesh");
+                meshObj.transform.parent = parent.transform;
+
+                meshObj.AddComponent<MeshRenderer>().sharedMaterial = new Material(Shader.Find("Standard"));
+                MeshFilters[i] = meshObj.AddComponent<MeshFilter>();
+                MeshFilters[i].sharedMesh = new Mesh();
+            }
+
+            terrainFaces[i] = new TerrainFace(MeshFilters[i].sharedMesh, resolution, Directions[i]);
+        }
     }
 
-    private bool CreateTris()
+    void GenerateMesh()
     {
-        return false;
+        foreach (TerrainFace face in terrainFaces)
+        {
+            face.ConstructMesh();
+        }
     }
 }

@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 
 public class TerrainFace : MonoBehaviour
@@ -26,7 +23,6 @@ public class TerrainFace : MonoBehaviour
         Vector3[] Verts = new Vector3[resolution * resolution];
         int[] tris = new int[(resolution - 1) * (resolution - 1) * 6];
         int triIndex = 0;
-        ;
         for (int y = 0; y < resolution; y++)
         {
             for (int x = 0; x < resolution; x++)

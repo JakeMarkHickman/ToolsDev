@@ -19,9 +19,12 @@ public class PlanetaryWindow : EditorWindow
     {
         VisualElement root = rootVisualElement;
 
-        //Label CurrentSelectedObj = new Label();
-        //CurrentSelectedObj.name = "Current Selected Object";
-        //CurrentSelectedObj.text = Selection.activeGameObject.name;
+        Label ResolutionLable = new Label();
+        ResolutionLable.name = "Resolution Lable";
+        ResolutionLable.text = "Resolution";
+        root.Add(ResolutionLable);
+
+
 
         //Resolution Slider
         SliderInt ResolutionSlider = new SliderInt(2, 256);

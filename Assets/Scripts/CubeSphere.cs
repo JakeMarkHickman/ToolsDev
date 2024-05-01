@@ -6,10 +6,10 @@ public class CubeSphere : MonoBehaviour
     MeshFilter[] MeshFilters;
     TerrainFace[] terrainFaces;
 
-    public void Init(int resolution, GameObject parent)
+    public void Init(int resolution, GameObject parent, PlanetSettings settings)
     {
         CubeSetUp(resolution, parent);
-        GenerateMesh();
+        GenerateMesh(settings);
     }
 
     void CubeSetUp(int resolution, GameObject parent)
@@ -38,11 +38,11 @@ public class CubeSphere : MonoBehaviour
         }
     }
 
-    void GenerateMesh()
+    void GenerateMesh(PlanetSettings settings)
     {
         foreach (TerrainFace face in terrainFaces)
         {
-            face.ConstructMesh();
+            face.ConstructMesh(settings);
         }
     }
 }

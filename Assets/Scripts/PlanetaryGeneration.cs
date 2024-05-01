@@ -5,8 +5,7 @@ public class PlanetaryGeneration : MonoBehaviour
 {
     public int PlanetSeed;
 
-    public float PlanetRadius;
-    public float PlanetMass;
+    public PlanetSettings settings;
 
     [Range(2, 256)]
     public int Resolution;
@@ -16,10 +15,12 @@ public class PlanetaryGeneration : MonoBehaviour
     private void Awake()
     {
         cubeSphere = new CubeSphere();
+        settings = new PlanetSettings();
+        settings.noiseSettings = new NoiseSettings();
     }
 
     public void Generate()
     {
-        cubeSphere.Init(Resolution, gameObject);
+        cubeSphere.Init(Resolution, gameObject, settings);
     }
 }

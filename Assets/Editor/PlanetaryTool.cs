@@ -6,6 +6,7 @@ using UnityEngine.UIElements;
 
 public class PlanetaryWindow : EditorWindow
 {
+    float Strength = 1.0f;
     int Resolution = 2;
 
     [MenuItem("Tools/Planet Generation/Generation")]
@@ -19,33 +20,28 @@ public class PlanetaryWindow : EditorWindow
     {
         VisualElement root = rootVisualElement;
 
-        Label ResolutionLable = new Label();
-        ResolutionLable.name = "Resolution Lable";
-        ResolutionLable.text = "Resolution";
-        root.Add(ResolutionLable);
+        VisualTreeAsset ToolTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/PlanetToolUI.uxml");
+        ToolTree.CloneTree(root);
 
+        //Strength Slider
+        Slider StrengthSlider = root.Q<Slider>("StrengthSlider");
+        //Strenght Slider Event
+        StrengthSlider.RegisterValueChangedCallback<float>(StrengthSliderChange);
 
-
-        //Resolution Slider
-        SliderInt ResolutionSlider = new SliderInt(2, 256);
-        ResolutionSlider.name = "Resolution";
-        ResolutionSlider.tooltip = "Changes the resolution of the planet";
-        root.Add(ResolutionSlider);
-
+        ////Resolution Slider
+        SliderInt ResolutionSlider = root.Q<SliderInt>("ResolutionSlider");
         //Resolution Slider Event
         ResolutionSlider.RegisterValueChangedCallback<int>(ResolutionSiderChange);
 
-
-
-        //Generate Button
-        Button GenerateButton = new Button();
-        GenerateButton.name = "Generate";
-        GenerateButton.text = "Generate";
-        GenerateButton.tooltip = "If a game object is selected with a planet component in, it will edit the currently selected game object - else it will generate a new one";
-        root.Add(GenerateButton);
-        
+        ////Generate Button
+        Button GenerateButton = root.Q<Button>("GenerateButton");
         //Generate Button on click Event
         GenerateButton.RegisterCallback<ClickEvent>(GenerateClick);
+    }
+
+    private void StrengthSliderChange(ChangeEvent<float> value)
+    {
+        Strength = value.newValue;
     }
 
     private void ResolutionSiderChange(ChangeEvent<int> value)
@@ -74,6 +70,7 @@ public class PlanetaryWindow : EditorWindow
     private void Generation(GameObject PlanetObject)
     {
         PlanetObject.GetComponent<PlanetaryGeneration>().Resolution = Resolution;
+        PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.Strength = Strength;
         PlanetObject.GetComponent<PlanetaryGeneration>().Generate();
     }
 }

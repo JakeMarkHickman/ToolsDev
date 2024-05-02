@@ -1,0 +1,15 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:ScrollView name="BaseScrollView">
+        <ui:Foldout text="Planet Settings" name="PlanetSettingsFoldout" style="-unity-font-style: bold; -unity-font: initial; -unity-text-align: upper-left; flex-direction: column;">
+            <ui:IntegerField label="Planet Radius" value="1" name="PlanetRadiusIntBox" style="align-items: center; flex-direction: row; justify-content: center; align-self: stretch; -unity-font-style: normal;" />
+            <ui:Foldout text="Noise Settings" name="NoiseSettingsFoldout" style="-unity-font-style: bold;">
+                <ui:Slider picking-mode="Ignore" label="Strength" value="1" high-value="1" name="StrengthSlider" style="-unity-font-style: normal;" />
+                <ui:Slider picking-mode="Ignore" label="Roughness" value="1" high-value="1" name="RoughnessSlider" style="-unity-font-style: normal;" />
+            </ui:Foldout>
+        </ui:Foldout>
+        <ui:Foldout text="Temp Settings" name="TempSettingsFoldout" style="-unity-font-style: bold;">
+            <ui:SliderInt picking-mode="Ignore" label="Resolution" value="2" high-value="256" name="ResolutionSlider" low-value="2" style="-unity-font-style: normal;" />
+        </ui:Foldout>
+        <ui:Button text="Generate!" display-tooltip-when-elided="true" name="GenerateButton" style="-unity-font-style: bold;" />
+    </ui:ScrollView>
+</ui:UXML>

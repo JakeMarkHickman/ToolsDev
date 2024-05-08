@@ -2,18 +2,22 @@ using UnityEngine;
 
 public class CubeSphere : MonoBehaviour
 {
+
+    NoiseGenerator noiseGenerator;
+
     [SerializeField, HideInInspector]
     MeshFilter[] MeshFilters;
     TerrainFace[] terrainFaces;
 
     public void Init(int resolution, GameObject parent, PlanetSettings settings)
     {
-        CubeSetUp(resolution, parent);
-        GenerateMesh(settings);
+        CubeSetUp(resolution, parent, settings);
+        GenerateMesh();
     }
 
-    void CubeSetUp(int resolution, GameObject parent)
+    void CubeSetUp(int resolution, GameObject parent, PlanetSettings settings)
     {
+        noiseGenerator = new NoiseGenerator(settings);
         if (MeshFilters == null || MeshFilters.Length == 0)
         {
             MeshFilters = new MeshFilter[6];
@@ -34,15 +38,15 @@ public class CubeSphere : MonoBehaviour
                 MeshFilters[i].sharedMesh = new Mesh();
             }
 
-            terrainFaces[i] = new TerrainFace(MeshFilters[i].sharedMesh, resolution, Directions[i]);
+            terrainFaces[i] = new TerrainFace(noiseGenerator, MeshFilters[i].sharedMesh, resolution, Directions[i]);
         }
     }
 
-    void GenerateMesh(PlanetSettings settings)
+    void GenerateMesh()
     {
         foreach (TerrainFace face in terrainFaces)
         {
-            face.ConstructMesh(settings);
+            face.ConstructMesh();
         }
     }
 }

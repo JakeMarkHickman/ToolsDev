@@ -6,10 +6,20 @@ using UnityEngine.UIElements;
 
 public class PlanetaryWindow : EditorWindow
 {
+    VisualElement root;
+    VisualTreeAsset ToolTree;
+
     int PlanetRadius = 1;
+
     float Strength = 1.0f;
-    float Roughness = 1.0f;
+    float Persistence = 0.5f;
+    int numLayers = 1;
+
+    float[] Roughness;
+
     int Resolution = 2;
+
+    
 
     [MenuItem("Tools/Planet Generation/Generation")]
     public static void ShowWindow()
@@ -20,9 +30,9 @@ public class PlanetaryWindow : EditorWindow
 
     public void CreateGUI()
     {
-        VisualElement root = rootVisualElement;
+        root = rootVisualElement;
 
-        VisualTreeAsset ToolTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/PlanetToolUI.uxml");
+        ToolTree = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/PlanetToolUI.uxml");
         ToolTree.CloneTree(root);
 
         //Planet Radius Int Field
@@ -35,10 +45,18 @@ public class PlanetaryWindow : EditorWindow
         //Strenght Slider Event
         StrengthSlider.RegisterValueChangedCallback<float>(StrengthSliderChange);
 
-        //Roughness Slider
-        Slider RoughnessSlider = root.Q<Slider>("RoughnessSlider");
-        //Roughness Slider Event
-        RoughnessSlider.RegisterValueChangedCallback<float>(RoughnessSliderChange);
+        //Persistence Slider
+        Slider PersistenceSlider = root.Q<Slider>("PersistenceSlider");
+        //Persistence Slider Event
+        PersistenceSlider.RegisterValueChangedCallback<float>(PersistanceSliderChange);
+
+        //Layer Slider
+        SliderInt NumLayersSlider = root.Q<SliderInt>("NumLayersSlider");
+        //Layer Slider Event
+        NumLayersSlider.RegisterValueChangedCallback<int>(NumLayersSliderChange);
+
+
+
 
         ////Resolution Slider
         SliderInt ResolutionSlider = root.Q<SliderInt>("ResolutionSlider");
@@ -61,16 +79,38 @@ public class PlanetaryWindow : EditorWindow
         Strength = value.newValue;
     }
 
-    private void RoughnessSliderChange(ChangeEvent<float> value)
+    private void PersistanceSliderChange(ChangeEvent<float> value)
     {
-        Roughness = value.newValue;
+        Persistence = value.newValue;
+    }
+
+    private void NumLayersSliderChange(ChangeEvent<int> value)
+    {
+        int preLayers = numLayers;
+        numLayers = value.newValue;
+        Roughness = new float[value.newValue];
+
+        if (preLayers < numLayers)
+        {
+            for (int i = preLayers; i < numLayers; i++)
+            {
+                //Add Elements
+                
+            }
+        }
+        else if (preLayers > numLayers)
+        {
+            for (int i = numLayers; i > preLayers; i--)
+            {
+                //Remove Elements
+            }
+        }
     }
 
     private void ResolutionSiderChange(ChangeEvent<int> value)
     {
         Resolution = value.newValue;
     }
-
 
     private void GenerateClick(ClickEvent EventData)
     {
@@ -93,7 +133,7 @@ public class PlanetaryWindow : EditorWindow
     {
         PlanetObject.GetComponent<PlanetaryGeneration>().settings.PlanetRadius = PlanetRadius;
         PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.Strength = Strength;
-        PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.Roughness = Roughness;
+        //PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.Roughness = Roughness;
         PlanetObject.GetComponent<PlanetaryGeneration>().Resolution = Resolution;
         PlanetObject.GetComponent<PlanetaryGeneration>().Generate();
     }

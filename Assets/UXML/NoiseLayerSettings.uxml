@@ -1,0 +1,5 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:Foldout text="NoiseLayerName" name="NoiseLayerName">
+        <ui:Slider picking-mode="Ignore" label="Roughness" value="2" high-value="10" name="RoughnessSlider" style="-unity-font-style: normal;" />
+    </ui:Foldout>
+</ui:UXML>

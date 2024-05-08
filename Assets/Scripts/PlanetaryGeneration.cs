@@ -17,10 +17,15 @@ public class PlanetaryGeneration : MonoBehaviour
         cubeSphere = new CubeSphere();
         settings = new PlanetSettings();
         settings.noiseSettings = new NoiseSettings();
+        settings.noiseSettings.layerSettings = new LayerSettings[settings.noiseSettings.NumLayers];
     }
 
     public void Generate()
     {
+        for (int i = 0; i < settings.noiseSettings.NumLayers; i++)
+        {
+            settings.noiseSettings.layerSettings[i] = new LayerSettings();
+        }
         cubeSphere.Init(Resolution, gameObject, settings);
     }
 }

@@ -14,6 +14,6 @@ public class NoiseGenerator
     public Vector3 CalculatePointOnPlanet(Vector3 pointOnUnitSphere)
     {
         float elevation = noiseFilter.Evaluate(pointOnUnitSphere);
-        return pointOnUnitSphere * settings.planetRadius * (1+elevation);
+        return pointOnUnitSphere * settings.PlanetRadius * (1+elevation);
     }
 }

@@ -1,15 +1,12 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
-    <ui:Template name="NoiseLayerSettings" src="project://database/Assets/UXML/NoiseLayerSettings.uxml?fileID=9197481963319205126&amp;guid=c9ad7c6e780c6af46bcd077cdf208132&amp;type=3" />
     <ui:ScrollView name="BaseScrollView">
         <ui:Foldout text="Planet Settings" name="PlanetSettingsFoldout" tooltip="The basic generation of the planet" style="-unity-font-style: bold; -unity-font: initial; -unity-text-align: upper-left; flex-direction: column;">
             <ui:IntegerField label="Planet Radius" value="1" name="PlanetRadiusIntField" tooltip="The radius of the planet" style="align-items: center; flex-direction: row; justify-content: center; align-self: stretch; -unity-font-style: normal;" />
             <ui:Foldout text="Noise Settings" name="NoiseSettingsFoldout" tooltip="Noise Generation Setting" style="-unity-font-style: bold;">
                 <ui:Slider picking-mode="Ignore" label="Strength" value="1" high-value="1" name="StrengthSlider" style="-unity-font-style: normal;" />
                 <ui:Slider picking-mode="Ignore" label="Persistence" value="0.5" high-value="1" name="PersistenceSlider" style="-unity-font-style: normal;" />
-                <ui:SliderInt picking-mode="Ignore" label="Number of Layers" value="1" high-value="8" low-value="1" show-input-field="false" name="NumLayersSlider" style="-unity-font-style: normal; font-size: 12px; flex-direction: row; align-items: auto;" />
-                <ui:ScrollView name="Layers">
-                    <ui:Instance template="NoiseLayerSettings" />
-                </ui:ScrollView>
+                <ui:SliderInt picking-mode="Ignore" label="Number of Layers" value="0" high-value="8" low-value="0" show-input-field="false" name="NumLayersSlider" style="-unity-font-style: normal; font-size: 12px; flex-direction: row; align-items: auto;" />
+                <ui:ScrollView name="LayersContainer" />
             </ui:Foldout>
         </ui:Foldout>
         <ui:Foldout text="Temp Settings" name="TempSettingsFoldout" style="-unity-font-style: bold;">

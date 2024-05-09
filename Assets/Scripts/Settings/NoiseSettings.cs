@@ -5,7 +5,7 @@ public class NoiseSettings
 {
     public float Strength = 1;
     [Range(1, 8)]
-    public int NumLayers = 1;
+    public int NumLayers = 0;
 
     public LayerSettings[] layerSettings;
 

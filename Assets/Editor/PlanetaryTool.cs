@@ -1,6 +1,7 @@
 using System.Numerics;
 using Unity.VisualScripting;
 using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -15,7 +16,7 @@ public class PlanetaryWindow : EditorWindow
     float Persistence = 0.5f;
     int numLayers = 0;
 
-    TemplateContainer[] NoiseLayers;
+    VisualElement[] NoiseLayers = new VisualElement[8];
     float[] Roughness;
 
     int Resolution = 2;
@@ -95,20 +96,40 @@ public class PlanetaryWindow : EditorWindow
 
         VisualTreeAsset NoiseSetting = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/NoiseLayerSettings.uxml");
 
+        
+
         if (preLayers < numLayers)
         {
             for (int i = preLayers; i < numLayers; i++)
             {
-                 NoiseSetting.CloneTree(LayersContainer);
+                //NoiseSetting.name = "NoiseSettings" + i.ToString();
+                NoiseLayers[i] = new Slider();
+                NoiseLayers[i].name = "NoiseSlider" + i.ToString();
+
+                LayersContainer.Add(NoiseLayers[i]);
+
+
+                //NoiseSetting.CloneTree(LayersContainer);
+
+                //NoiseLayers[i] = NoiseSetting.name;
+                //NoiseLayers[i] = NoiseSetting.Instantiate();
+                //NoiseLayers[i].
             }
         }
         else if (preLayers > numLayers)
         {
+            //LayersContainer.Remove(NoiseLayers[numLayers]);
+
+            for (int i = preLayers; i < numLayers; i++)
+            {
+                Debug.Log("Hey");
+            }
+
             for (int i = numLayers; i > preLayers; i--)
             {
-                //NoiseSettings[i].
-                //root p
-                
+                Debug.Log("AHHHHHHHHHHHHH");
+                ////NoiseLayers[i].Remove(NoiseLayers[i]);
+                //LayersContainer.Remove(NoiseLayers[i]);
             }
         }
     }

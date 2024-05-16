@@ -15,7 +15,7 @@ public class PlanetaryWindow : EditorWindow
     float Persistence = 0.5f;
     int numLayers = 0;
 
-    VisualTreeAsset[] NoiseSettings;
+    TemplateContainer[] NoiseLayers;
     float[] Roughness;
 
     int Resolution = 2;
@@ -93,23 +93,22 @@ public class PlanetaryWindow : EditorWindow
 
         VisualElement LayersContainer = root.Q<VisualElement>("LayersContainer");
 
-        VisualTreeAsset NoiseSetting = new VisualTreeAsset();
-        NoiseSetting = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/NoiseLayerSettings.uxml");
+        VisualTreeAsset NoiseSetting = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/NoiseLayerSettings.uxml");
 
         if (preLayers < numLayers)
         {
             for (int i = preLayers; i < numLayers; i++)
             {
-                NoiseSetting.CloneTree(LayersContainer);
-                NoiseSettings[i] = NoiseSetting;
+                 NoiseSetting.CloneTree(LayersContainer);
             }
         }
         else if (preLayers > numLayers)
         {
             for (int i = numLayers; i > preLayers; i--)
             {
-                NoiseSettings[i].
+                //NoiseSettings[i].
                 //root p
+                
             }
         }
     }

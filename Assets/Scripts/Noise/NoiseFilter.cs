@@ -32,6 +32,7 @@ public class NoiseFilter
             }
         }
 
+        //noiseValue = Mathf
         return noiseValue * settings.Strength;
     }
 }

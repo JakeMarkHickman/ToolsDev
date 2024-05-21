@@ -1,14 +1,17 @@
+using Codice.Client.Common.GameUI;
 using System.Numerics;
 using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.UIElements;
 using UnityEngine;
+using System.Linq;
 using UnityEngine.UIElements;
 
 public class PlanetaryWindow : EditorWindow
 {
     VisualElement root;
     VisualTreeAsset ToolTree;
+    VisualElement LayersContainer;
 
     int PlanetRadius = 1;
 
@@ -16,7 +19,7 @@ public class PlanetaryWindow : EditorWindow
     float Persistence = 0.5f;
     int numLayers = 0;
 
-    VisualElement[] NoiseLayers = new VisualElement[8];
+    Slider[] NoiseLayers = new Slider[8];
     float[] Roughness;
 
     int Resolution = 2;
@@ -90,9 +93,9 @@ public class PlanetaryWindow : EditorWindow
     {
         int preLayers = numLayers;
         numLayers = value.newValue;
-        Roughness = new float[value.newValue];
+        
 
-        VisualElement LayersContainer = root.Q<VisualElement>("LayersContainer");
+        LayersContainer = root.Q<VisualElement>("LayersContainer");
 
         VisualTreeAsset NoiseSetting = AssetDatabase.LoadAssetAtPath<VisualTreeAsset>("Assets/UXML/NoiseLayerSettings.uxml");
 
@@ -102,37 +105,38 @@ public class PlanetaryWindow : EditorWindow
         {
             for (int i = preLayers; i < numLayers; i++)
             {
-                //NoiseSetting.name = "NoiseSettings" + i.ToString();
                 NoiseLayers[i] = new Slider();
                 NoiseLayers[i].name = "NoiseSlider" + i.ToString();
 
+                NoiseLayers[i].highValue = 10;
+                NoiseLayers[i].label = "Noise for Layer: " + i.ToString();
+
                 LayersContainer.Add(NoiseLayers[i]);
 
+                Roughness = new float[value.newValue];
 
-                //NoiseSetting.CloneTree(LayersContainer);
-
-                //NoiseLayers[i] = NoiseSetting.name;
-                //NoiseLayers[i] = NoiseSetting.Instantiate();
-                //NoiseLayers[i].
+                NoiseLayers[i].RegisterCallback<ChangeEvent<float>, int>(RoughnessSliderChange, i);
             }
         }
         else if (preLayers > numLayers)
         {
-            //LayersContainer.Remove(NoiseLayers[numLayers]);
-
-            for (int i = preLayers; i < numLayers; i++)
+            for (int i = preLayers; i > numLayers; i--)
             {
-                Debug.Log("Hey");
-            }
 
-            for (int i = numLayers; i > preLayers; i--)
-            {
-                Debug.Log("AHHHHHHHHHHHHH");
-                ////NoiseLayers[i].Remove(NoiseLayers[i]);
-                //LayersContainer.Remove(NoiseLayers[i]);
+                Roughness = new float[value.newValue];
+
+                int calcIdx = i - 1;
+                LayersContainer.RemoveAt(calcIdx);
+                
             }
         }
     }
+
+    private void RoughnessSliderChange(ChangeEvent<float> value, int index)
+    {
+        Roughness[index] = value.newValue;
+    }
+
 
     private void ResolutionSiderChange(ChangeEvent<int> value)
     {
@@ -161,6 +165,16 @@ public class PlanetaryWindow : EditorWindow
         PlanetObject.GetComponent<PlanetaryGeneration>().settings.PlanetRadius = PlanetRadius;
         PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.Strength = Strength;
         PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.NumLayers = numLayers;
+
+        PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.layerSettings = new LayerSettings[numLayers];
+
+        for (int i = 0; i < numLayers; i++)
+        {
+            PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.layerSettings[i] = new LayerSettings();
+            Debug.Log(PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.layerSettings[i]);
+            PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.layerSettings[i].Roughness = Roughness[i];
+        }
+        
         PlanetObject.GetComponent<PlanetaryGeneration>().Resolution = Resolution;
         PlanetObject.GetComponent<PlanetaryGeneration>().Generate();
     }

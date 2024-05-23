@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TerrainFace : MonoBehaviour
+public class TerrainFace
 {
     NoiseGenerator noiseGen;
     Mesh mesh;

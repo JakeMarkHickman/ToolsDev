@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 [ExecuteInEditMode()]
@@ -12,10 +13,16 @@ public class PlanetaryGeneration : MonoBehaviour
 
     CubeSphere cubeSphere;
 
+    private void OnMouseDown()
+    {
+        Debug.Log("Yippie");
+    }
+
     private void Awake()
     {
         cubeSphere = new CubeSphere();
-        settings = new PlanetSettings();
+        settings = ScriptableObject.CreateInstance<PlanetSettings>();
+        //settings = new PlanetSettings();
         settings.noiseSettings = new NoiseSettings();
 
     }

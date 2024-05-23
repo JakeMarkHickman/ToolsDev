@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CubeSphere : MonoBehaviour
+public class CubeSphere
 {
 
     NoiseGenerator noiseGenerator;

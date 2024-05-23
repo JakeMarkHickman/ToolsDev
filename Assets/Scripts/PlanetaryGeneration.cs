@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -13,10 +14,20 @@ public class PlanetaryGeneration : MonoBehaviour
 
     CubeSphere cubeSphere;
 
-    private void OnMouseDown()
-    {
-        Debug.Log("Yippie");
-    }
+    public static Transform Camera; //Ref to the players camera
+
+    //public static Dictionary<int, float> LOD = new Dictionary<int, float>()
+    //{
+    //    {0, Mathf.Infinity},
+    //    {1, 60f},
+    //    {2, 25f},
+    //    {3, 10f},
+    //    {4, 4f},
+    //    { }
+    //    { }
+    //    { }
+
+    //}
 
     private void Awake()
     {

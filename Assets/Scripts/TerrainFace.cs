@@ -66,13 +66,22 @@ public class TerrainFace
         Vertices.Clear();
         Triangles.Clear();
 
-        Chunk parentChunk = new Chunk(null, null, localUp.normalized * PlanetaryGeneration.size, settings.PlanetRadius, 0, localUp, axisA, axisB);
+        Chunk parentChunk = new Chunk(null, null, localUp.normalized * settings.PlanetRadius, settings.PlanetRadius, 0, localUp, axisA, axisB, settings, noiseGen);
         parentChunk.GenerateChildren();
 
         int triangleOffset = 0;
         foreach(Chunk child in parentChunk.GetVisibleChildren())
         {
-            //(Vector3[], int[]) VertsAndTris = child
+            (Vector3[], int[]) VertsAndTris = child.CalculateVertsAndTris(triangleOffset, settings);
+            Vertices.AddRange(VertsAndTris.Item1);
+            Triangles.AddRange(VertsAndTris.Item2);
+            triangleOffset += VertsAndTris.Item1.Length;
+
         }
+
+        mesh.Clear();
+        mesh.vertices = Vertices.ToArray();
+        mesh.triangles = Triangles.ToArray();
+        mesh.RecalculateNormals();
     }
 }

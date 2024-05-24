@@ -1,16 +1,17 @@
 <ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
     <ui:ScrollView name="BaseScrollView">
         <ui:Foldout text="Planet Settings" name="PlanetSettingsFoldout" tooltip="The basic generation of the planet" style="-unity-font-style: bold; -unity-font: initial; -unity-text-align: upper-left; flex-direction: column;">
-            <ui:IntegerField label="Planet Radius" value="1" name="PlanetRadiusIntField" tooltip="The radius of the planet" style="align-items: center; flex-direction: row; justify-content: center; align-self: stretch; -unity-font-style: normal;" />
+            <ui:SliderInt picking-mode="Ignore" label="Planet Radius" value="4" high-value="7" low-value="4" show-input-field="true" name="PlanetRadiusIntSlider" style="-unity-font-style: normal;" />
             <ui:Foldout text="Noise Settings" name="NoiseSettingsFoldout" tooltip="Noise Generation Setting" style="-unity-font-style: bold;">
-                <ui:Slider picking-mode="Ignore" label="Strength" value="1" high-value="1" name="StrengthSlider" style="-unity-font-style: normal;" />
-                <ui:Slider picking-mode="Ignore" label="Persistence" value="0.5" high-value="1" name="PersistenceSlider" style="-unity-font-style: normal;" />
-                <ui:SliderInt picking-mode="Ignore" label="Number of Layers" value="0" high-value="8" low-value="0" show-input-field="false" name="NumLayersSlider" style="-unity-font-style: normal; font-size: 12px; flex-direction: row; align-items: auto;" />
+                <ui:Slider picking-mode="Ignore" label="Strength" value="1" high-value="1" name="StrengthSlider" show-input-field="true" tooltip="The strength of octaves" style="-unity-font-style: normal;" />
+                <ui:Slider picking-mode="Ignore" label="Persistence" value="0.5" high-value="1" name="PersistenceSlider" show-input-field="true" tooltip="How higher octaves affect lower octaves" style="-unity-font-style: normal;" />
+                <ui:SliderInt picking-mode="Ignore" label="Number of Layers" value="0" high-value="8" low-value="0" show-input-field="true" name="NumLayersSlider" tooltip="Number of Octaves" style="-unity-font-style: normal; font-size: 12px; flex-direction: row; align-items: auto;" />
                 <ui:ScrollView name="LayersContainer" />
             </ui:Foldout>
         </ui:Foldout>
-        <ui:Foldout text="Temp Settings" name="TempSettingsFoldout" style="-unity-font-style: bold;">
-            <ui:SliderInt picking-mode="Ignore" label="Resolution" value="2" high-value="256" name="ResolutionSlider" low-value="2" style="-unity-font-style: normal;" />
+        <ui:Foldout text="Resolution Settings" name="TempSettingsFoldout" style="-unity-font-style: bold;">
+            <ui:Toggle label="Dynamic?" tooltip="Generate a dynamic planet" name="DynamicToggle" value="false" text="EXPERIMENTAL" style="-unity-font-style: normal;" />
+            <ui:ScrollView name="ResolutionSettings" />
         </ui:Foldout>
         <ui:Button text="Generate" display-tooltip-when-elided="true" name="GenerateButton" style="-unity-font-style: bold;" />
     </ui:ScrollView>

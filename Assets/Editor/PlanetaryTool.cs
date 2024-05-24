@@ -1,10 +1,6 @@
-using Codice.Client.Common.GameUI;
-using System.Numerics;
-using Unity.VisualScripting;
+
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine;
-using System.Linq;
 using UnityEngine.UIElements;
 
 public class PlanetaryWindow : EditorWindow
@@ -12,8 +8,9 @@ public class PlanetaryWindow : EditorWindow
     VisualElement root;
     VisualTreeAsset ToolTree;
     VisualElement LayersContainer;
+    VisualElement ResolutionSettings;
 
-    int PlanetRadius = 1;
+    int PlanetRadius = 4;
 
     float Strength = 1.0f;
     float Persistence = 0.5f;
@@ -22,9 +19,13 @@ public class PlanetaryWindow : EditorWindow
     Slider[] NoiseLayers = new Slider[8];
     float[] Roughness;
 
+    bool Dynamic;
+
     int Resolution = 2;
 
-    
+    SliderInt ResolutionSlider;
+    //Slider R
+
 
     [MenuItem("Tools/Planet Generation/Generation")]
     public static void ShowWindow()
@@ -41,9 +42,9 @@ public class PlanetaryWindow : EditorWindow
         ToolTree.CloneTree(root);
 
         //Planet Radius Int Field
-        IntegerField PlanetRadiusIntField = root.Q<IntegerField>("PlanetRadiusIntField");
+        SliderInt PlanetRadiusIntSlider = root.Q<SliderInt>("PlanetRadiusIntSlider");
         //Planet Radius Int Field Event
-        PlanetRadiusIntField.RegisterValueChangedCallback<int>(PlanetRadiusIntFieldChange);
+        PlanetRadiusIntSlider.RegisterValueChangedCallback<int>(PlanetRadiusIntSliderChange);
 
         //Strength Slider
         Slider StrengthSlider = root.Q<Slider>("StrengthSlider");
@@ -60,13 +61,25 @@ public class PlanetaryWindow : EditorWindow
         //Layer Slider Event
         NumLayersSlider.RegisterValueChangedCallback<int>(NumLayersSliderChange);
 
+        Toggle DynamicToggle = root.Q<Toggle>("DynamicToggle");
+        DynamicToggle.RegisterValueChangedCallback<bool>(DynamicToggleChange);
 
+        ResolutionSettings = root.Q<VisualElement>("ResolutionSettings");
 
+        ResolutionSlider = new SliderInt();
+        ResolutionSlider.label = "Resolution";
+        ResolutionSlider.lowValue = 2;
+        ResolutionSlider.highValue = 256;
+        ResolutionSlider.value = 2;
+        ResolutionSlider.showInputField = true;
 
-        ////Resolution Slider
-        SliderInt ResolutionSlider = root.Q<SliderInt>("ResolutionSlider");
-        //Resolution Slider Event
+        ResolutionSettings.Add(ResolutionSlider);
         ResolutionSlider.RegisterValueChangedCallback<int>(ResolutionSiderChange);
+
+        //////Resolution Slider
+        //SliderInt ResolutionSlider = root.Q<SliderInt>("ResolutionSlider");
+        ////Resolution Slider Event
+        //ResolutionSlider.RegisterValueChangedCallback<int>(ResolutionSiderChange);
 
         ////Generate Button
         Button GenerateButton = root.Q<Button>("GenerateButton");
@@ -74,7 +87,7 @@ public class PlanetaryWindow : EditorWindow
         GenerateButton.RegisterCallback<ClickEvent>(GenerateClick);
     }
 
-    private void PlanetRadiusIntFieldChange(ChangeEvent<int> value)
+    private void PlanetRadiusIntSliderChange(ChangeEvent<int> value)
     {
         PlanetRadius = value.newValue;
     }
@@ -111,6 +124,8 @@ public class PlanetaryWindow : EditorWindow
                 NoiseLayers[i].highValue = 10;
                 NoiseLayers[i].label = "Noise for Layer: " + i.ToString();
 
+                NoiseLayers[i].showInputField = true;
+
                 LayersContainer.Add(NoiseLayers[i]);
 
                 Roughness = new float[value.newValue];
@@ -127,7 +142,8 @@ public class PlanetaryWindow : EditorWindow
 
                 int calcIdx = i - 1;
                 LayersContainer.RemoveAt(calcIdx);
-                
+
+                NoiseLayers[calcIdx].UnregisterCallback<ChangeEvent<float>, int>(RoughnessSliderChange);
             }
         }
     }
@@ -141,6 +157,39 @@ public class PlanetaryWindow : EditorWindow
     private void ResolutionSiderChange(ChangeEvent<int> value)
     {
         Resolution = value.newValue;
+    }
+
+    private void DynamicToggleChange(ChangeEvent<bool> value)
+    {
+        Dynamic = value.newValue;
+
+        if (Dynamic)
+        {
+            Resolution = 4;
+            if (ResolutionSlider != null)
+            {
+               ResolutionSettings.Remove(ResolutionSlider);
+            }
+
+            ResolutionSlider.UnregisterValueChangedCallback<int>(ResolutionSiderChange);
+        }
+        else
+        {
+            if (ResolutionSlider == null)
+            {
+                ResolutionSlider = new SliderInt();
+                ResolutionSlider.label = "Resolution";
+                ResolutionSlider.lowValue = 2;
+                ResolutionSlider.highValue = 256;
+                ResolutionSlider.value = 2;
+                ResolutionSlider.showInputField = true;
+            }
+
+            ResolutionSettings.Add(ResolutionSlider);
+            
+
+            ResolutionSlider.RegisterValueChangedCallback<int>(ResolutionSiderChange);
+        }
     }
 
     private void GenerateClick(ClickEvent EventData)
@@ -163,6 +212,7 @@ public class PlanetaryWindow : EditorWindow
     private void Generation(GameObject PlanetObject)
     {
         PlanetObject.GetComponent<PlanetaryGeneration>().settings.PlanetRadius = PlanetRadius;
+        PlanetObject.transform.localScale = new Vector3(PlanetRadius,PlanetRadius,PlanetRadius);
         PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.Strength = Strength;
         PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.NumLayers = numLayers;
 
@@ -174,7 +224,9 @@ public class PlanetaryWindow : EditorWindow
             Debug.Log(PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.layerSettings[i]);
             PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.layerSettings[i].Roughness = Roughness[i];
         }
-        
+
+        PlanetObject.GetComponent<PlanetaryGeneration>().settings.DynamicPlanet = Dynamic;
+
         PlanetObject.GetComponent<PlanetaryGeneration>().settings.Resolution = Resolution;
         PlanetObject.GetComponent<PlanetaryGeneration>().Generate();
     }

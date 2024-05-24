@@ -1,3 +1,4 @@
+using Palmmedia.ReportGenerator.Core;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -5,6 +6,12 @@ using UnityEngine;
 [ExecuteInEditMode()]
 public class PlanetaryGeneration : MonoBehaviour
 {
+
+    private void Update()
+    {
+        Generate();
+    }
+
     public int PlanetSeed;
 
     public PlanetSettings settings;
@@ -24,10 +31,11 @@ public class PlanetaryGeneration : MonoBehaviour
         {1, 60f},
         {2, 25f},
         {3, 10f},
-        {4, 4f},
-        {5, 1.5f},
-        {6, 0.7f},
-        {8, 0.1f}
+        {4, 8.5f},
+        {5, 5.5f},
+        {6, 3f},
+        {7, 1.5f},
+        {8, 1f}
     };
 
     private void Awake()
@@ -46,7 +54,23 @@ public class PlanetaryGeneration : MonoBehaviour
         //for (int i = 0; i < settings.noiseSettings.NumLayers; i++)
         //{
         //    settings.noiseSettings.layerSettings[i] = new LayerSettings();
-        //}      
+        //}
+
+        size = settings.PlanetRadius;
+
+        if (Camera == null)
+        {
+            if (!GameObject.FindWithTag("MainCamera"))
+            {
+                GameObject cam = new GameObject();
+                cam.AddComponent<Camera>();
+                cam.tag = "MainCamera";
+                cam.name = "MainCamera";
+            }
+
+            Camera = GameObject.FindWithTag("MainCamera").transform;
+        }
+
         cubeSphere.Init(gameObject, settings);
     }
 }

@@ -175,7 +175,7 @@ public class PlanetaryWindow : EditorWindow
             PlanetObject.GetComponent<PlanetaryGeneration>().settings.noiseSettings.layerSettings[i].Roughness = Roughness[i];
         }
         
-        PlanetObject.GetComponent<PlanetaryGeneration>().Resolution = Resolution;
+        PlanetObject.GetComponent<PlanetaryGeneration>().settings.Resolution = Resolution;
         PlanetObject.GetComponent<PlanetaryGeneration>().Generate();
     }
 }

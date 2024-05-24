@@ -9,13 +9,13 @@ public class CubeSphere
     MeshFilter[] MeshFilters;
     TerrainFace[] terrainFaces;
 
-    public void Init(int resolution, GameObject parent, PlanetSettings settings)
+    public void Init(GameObject parent, PlanetSettings settings)
     {
-        CubeSetUp(resolution, parent, settings);
-        GenerateMesh();
+        CubeSetUp(parent, settings);
+        GenerateMesh(settings);
     }
 
-    void CubeSetUp(int resolution, GameObject parent, PlanetSettings settings)
+    void CubeSetUp(GameObject parent, PlanetSettings settings)
     {
         noiseGenerator = new NoiseGenerator(settings);
         if (MeshFilters == null || MeshFilters.Length == 0)
@@ -38,15 +38,22 @@ public class CubeSphere
                 MeshFilters[i].sharedMesh = new Mesh();
             }
 
-            terrainFaces[i] = new TerrainFace(noiseGenerator, MeshFilters[i].sharedMesh, resolution, Directions[i]);
+            terrainFaces[i] = new TerrainFace(noiseGenerator, MeshFilters[i].sharedMesh, settings, Directions[i]);
         }
     }
 
-    void GenerateMesh()
+    void GenerateMesh(PlanetSettings settings)
     {
         foreach (TerrainFace face in terrainFaces)
         {
-            face.ConstructMesh();
+            if(settings.DynamicPlanet)
+            {
+                face.ConstructTree(settings);
+            }
+            else
+            {
+                face.ConstructMesh();
+            }
         }
     }
 }

@@ -5,4 +5,6 @@ public class PlanetSettings : ScriptableObject
 {
     public float PlanetRadius = 1;
     public NoiseSettings noiseSettings;
+    public bool DynamicPlanet = false;
+    public int Resolution;
 }

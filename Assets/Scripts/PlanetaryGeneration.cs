@@ -9,25 +9,26 @@ public class PlanetaryGeneration : MonoBehaviour
 
     public PlanetSettings settings;
 
-    [Range(2, 256)]
-    public int Resolution;
+    //[Range(2, 256)]
+    //public int Resolution;
 
     CubeSphere cubeSphere;
 
+    public static float size = 1f;
+
     public static Transform Camera; //Ref to the players camera
 
-    //public static Dictionary<int, float> LOD = new Dictionary<int, float>()
-    //{
-    //    {0, Mathf.Infinity},
-    //    {1, 60f},
-    //    {2, 25f},
-    //    {3, 10f},
-    //    {4, 4f},
-    //    { }
-    //    { }
-    //    { }
-
-    //}
+    public static Dictionary<int, float> LOD = new Dictionary<int, float>()
+    {
+        {0, Mathf.Infinity},
+        {1, 60f},
+        {2, 25f},
+        {3, 10f},
+        {4, 4f},
+        {5, 1.5f},
+        {6, 0.7f},
+        {8, 0.1f}
+    };
 
     private void Awake()
     {
@@ -46,6 +47,6 @@ public class PlanetaryGeneration : MonoBehaviour
         //{
         //    settings.noiseSettings.layerSettings[i] = new LayerSettings();
         //}      
-        cubeSphere.Init(Resolution, gameObject, settings);
+        cubeSphere.Init(gameObject, settings);
     }
 }
